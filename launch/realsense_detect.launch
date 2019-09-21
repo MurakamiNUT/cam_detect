@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+  <group ns="camera_detection">
+    <node pkg="nodelet" type="nodelet" name="camera_manager"  args="manager"/>
+
+    <!--<node pkg="nodelet" type="nodelet" name="super_res_nodelet" args="load super_resolution/super_res camera_manager" >
+      <remap from="low_res_image" to="image_rect"/>
+    </node>-->
+
+    <node name="image_raw_view" pkg="image_view" type="image_view" >
+      <remap from="image" to="/camera/fisheye1/image_raw"/>
+    </node>
+
+    <node pkg="nodelet" type="nodelet" name="barcode_reader_nodelet" args="load zbar_ros/barcode_reader_nodelet camera_manager">
+      <param name="throttle_repeated_barcodes" type="double" value="1.0"/>
+      <remap from="image" to="/camera/fisheye1/image_raw"/>
+    </node>
+
+  </group>
+</launch>
